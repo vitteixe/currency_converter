@@ -13,11 +13,12 @@ void main() async {
   ));
 }
 
+//- acessando API -//
 Future<Map> getData() async{
   http.Response response = await http.get(Uri.parse(request));
   return json.decode(response.body);
 }
-
+//-! acessando API -//
 
 //--                STFUL                   --//
 
@@ -38,12 +39,40 @@ class _HomeState extends State<Home> {
       Scaffold(
       backgroundColor: Colors.black38,
       appBar: AppBar(
-        title: Text("Conversor"),
+        title: const Text("Conversor"),
         backgroundColor: Colors.amber,
         centerTitle: true,
       ),
 
-      
+      body: FutureBuilder<Map>(
+        future: getData(),
+        builder: (context,snapshot) {
+          switch(snapshot.connectionState){
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return const Center(
+                  child: Text("Carregando dados...",
+                  style: TextStyle(
+                      color: Colors.amberAccent,
+                      fontSize: 25.0),
+                  textAlign: TextAlign.center,)
+              );
+
+            default:
+              if(snapshot.hasError){
+                return const Center(
+                    child: Text("Erro ao Carregar :(",
+                      style: TextStyle(
+                          color: Colors.amberAccent,
+                          fontSize: 25.0),
+                      textAlign: TextAlign.center,)
+                );
+              } else {
+                return Container(color: Colors.green,);
+              }
+          }
+        }
+      )
     );
   }
 }
