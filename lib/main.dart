@@ -11,13 +11,13 @@ void main() async {
     debugShowCheckedModeBanner: false,
     home: Home(),
     theme: ThemeData(
-      hintColor: Colors.amber,
-      primaryColor: Colors.white,
+      hintColor: Colors.white,
+      primaryColor: Colors.amber,
       inputDecorationTheme: InputDecorationTheme(
         enabledBorder:
-          OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-        focusedBorder:
           OutlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
+        focusedBorder:
+          OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
         hintStyle: TextStyle(color: Colors.amber),
       )),
   ));
@@ -43,8 +43,31 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  //-- Controladores --//
+
+  final realController = TextEditingController();
+  final dolarController = TextEditingController();
+  final euroController = TextEditingController();
+  //-! Controladores --//
+
   double? dolar;
   double? euro;
+
+  //-- Funções de Conversões --//
+
+  void _realChanged(String text){
+    print(text);
+  }
+
+  void _dolarChanged(String text){
+    print(text);
+  }
+
+  void _euroChanged(String text){
+    print(text);
+  }
+
+  //-- Funções de Conversões --//
 
 
   @override
@@ -88,49 +111,19 @@ class _HomeState extends State<Home> {
                   padding: EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: const <Widget>[
+                    children: <Widget>[
                       Icon(Icons.monetization_on, size: 160.0,color: Colors.amber),
                       //--fim icon--//
 
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "Reais",
-                          labelStyle: TextStyle(color: Colors.amber),
-                          border: OutlineInputBorder(),
-                          prefixText: "R\$",
-                        ),
-                        style: TextStyle(
-                          color: Colors.amber, fontSize: 25.0,
-                        ),
-                      ),
+                      buildTextField("Reais", "R\$", realController, _realChanged),
 
-                      Divider(),
+                      const Divider(),
 
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "Dolares",
-                          labelStyle: TextStyle(color: Colors.amber),
-                          border: OutlineInputBorder(),
-                          prefixText: "US\$",
-                        ),
-                        style: TextStyle(
-                          color: Colors.amber, fontSize: 25.0,
-                        ),
-                      ),
+                      buildTextField("Dolares", "US\$", dolarController, _dolarChanged),
 
-                      Divider(),
-                      
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "Euros",
-                          labelStyle: TextStyle(color: Colors.amber),
-                          border: OutlineInputBorder(),
-                          prefixText: "€",
-                        ),
-                        style: TextStyle(
-                          color: Colors.amber, fontSize: 25.0,
-                        ),
-                      ),
+                      const Divider(),
+
+                      buildTextField("Euro","€", euroController, _euroChanged),
 
                     ],
                   ),
@@ -142,4 +135,20 @@ class _HomeState extends State<Home> {
       )
     );
   }
+}
+
+Widget buildTextField(String label, prefix, TextEditingController c, Function f){
+  return TextField(
+    controller: c,
+    decoration: InputDecoration(
+      labelText: label,
+      labelStyle: TextStyle(color: Colors.amber),
+      prefixText: prefix
+    ),
+    style: TextStyle(
+      color: Colors.amber, fontSize: 25.0
+    ),
+    onChanged: f as void Function(String)?,
+    keyboardType: TextInputType.number,
+  );
 }
